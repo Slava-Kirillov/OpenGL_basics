@@ -12,7 +12,7 @@ void init(void)
     //загрузка текстур с помощью библиотеки SOIL
     tex_2d = SOIL_load_OGL_texture
     (
-     "/Users/user/Desktop/ComputerGraphics/ComputerGraphics/texture2.jpg",
+     "/home/kirillov/CLionProjects/OpenGL/texture.jpg",
      SOIL_LOAD_AUTO,
      SOIL_CREATE_NEW_ID,
      SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -139,13 +139,6 @@ void display(void)
     glPopMatrix();
     glFlush();
     glDisable(GL_TEXTURE_2D);
-    glPopMatrix();
-    
-    glPushMatrix();
-    glTranslatef(-3.5, -10, -12);
-    glColor3f(0.439216, 0.858824, 0.576471);
-    glScalef(1.0, 1.0, 1.0);
-    glutWireTeapot(2.5);
     glPopMatrix();
     
     glFlush();

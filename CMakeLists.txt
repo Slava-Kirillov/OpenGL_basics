@@ -16,8 +16,6 @@ add_executable(OpenGL
         stb_image_aug.c
         stb_image_aug.h
         stbi_DDS_aug.h
-        stbi_DDS_aug_c.h
-        Vector3D.cpp
-        Vector3D.hpp)
+        stbi_DDS_aug_c.h)
 
 target_link_libraries(OpenGL glut GL GLU)
