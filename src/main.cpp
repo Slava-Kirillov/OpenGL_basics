@@ -5,6 +5,7 @@
 
 GLuint texture1;
 GLuint texture2;
+GLuint texture3;
 
 GLfloat rtri;           // Угол для треугольник
 GLfloat rquad;          // Угол для четырехугольника
@@ -18,30 +19,46 @@ GLfloat LightPosition1[] = {sphereTransX, sphereTransY, sphereTransZ, 1.0f};    
 void init(void) {
     //загрузка текстур с помощью библиотеки SOIL
     texture1 = SOIL_load_OGL_texture(
-            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/texture1.jpg",
+            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/texture2.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
     );
 
     texture2 = SOIL_load_OGL_texture(
-            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/texture4.jpg",
+            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/texture6.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
     );
+
+    texture3 = SOIL_load_OGL_texture(
+            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/floor.jpg",
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+    );
+
 
     glShadeModel(GL_SMOOTH);      // Разрешение сглаженного закрашивания
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f); // Черный фон
     glClearDepth(1.0f);           // Установка буфера глубины
     glDepthFunc(GL_LEQUAL);       // Тип теста глубины
 
-    GLfloat LightAmbient1[] = {0.5f, 0.5f, 0.5f, 1.0f}; // Значения фонового света
+    GLfloat LightAmbient1[] = {0.3f, 0.3f, 0.3f, 1.0f}; // Значения фонового света
     GLfloat LightDiffuse1[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Значения диффузного света
     glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient1);    // Установка Фонового Света
     glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse1);    // Установка Диффузного Света
     glLightfv(GL_LIGHT1, GL_POSITION, LightPosition1);   // Позиция света
     glEnable(GL_LIGHT1); // Разрешение источника света номер один
+
+    GLfloat LightPosition2[] = {0.0f, 0.0f, -11.0, 1.0f};     // Позиция света
+    GLfloat LightAmbient2[] = {0.0f, 0.0f, 0.0f, 0.0f}; // Значения фонового света
+    GLfloat LightDiffuse2[] = {0.0f, 1.0f, 0.0f, 1.0f}; // Значения диффузного света
+    glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmbient2);    // Установка Фонового Света
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse2);    // Установка Диффузного Света
+    glLightfv(GL_LIGHT0, GL_POSITION, LightPosition2);   // Позиция света
+    glEnable(GL_LIGHT0); // Разрешение источника света номер один
 
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -59,11 +76,11 @@ void drawPyramid() {
 
     //Рисование пирамиды
     glLoadIdentity();                               // Сброс просмотра
-    glTranslatef(-3.0, -2.0, -15.0f);                 // Сдвиг влево и вглубь экрана
+    glTranslatef(2.5f, -2.0f, -12.0f);          // Сдвинуть вправо и вглубь экрана
     glRotatef(rtri, 0.0f, 1.0f, 0.0f);                 // Вращение пирамиды по оси Y
 
     glBegin(GL_TRIANGLES);                          // Начало рисования пирамиды
-    glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
+    glNormal3f(0.0f, 1.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Верх треугольника (Передняя)
     glTexCoord2f(0.0f, 0.0f);
@@ -71,7 +88,7 @@ void drawPyramid() {
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);                  // Правая точка
 
-    glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
+    glNormal3f(1.0f, 1.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Верх треугольника (Правая)
     glTexCoord2f(0.0f, 0.0f);
@@ -79,7 +96,7 @@ void drawPyramid() {
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);                 // Право треугольника (Правая)
 
-    glNormal3f(0.0f, 0.0f, -1.0f);     // Нормаль указывает от наблюдателя
+    glNormal3f(0.0f, 1.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Низ треугольника (Сзади)
     glTexCoord2f(0.0f, 0.0f);
@@ -87,7 +104,7 @@ void drawPyramid() {
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);                 // Право треугольника (Сзади)
 
-    glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
+    glNormal3f(-1.0f, 1.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Верх треугольника (Лево)
     glTexCoord2f(0.0f, 0.0f);
@@ -111,7 +128,62 @@ void drawPyramid() {
 
     glFlush();
 
-    rtri += 1.0f;             // Увеличим переменную вращения для треугольника
+    rtri += 0.2f;             // Увеличим переменную вращения для треугольника
+
+    glPopMatrix();
+}
+
+void drawLightCube() {
+    glPushMatrix();
+
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -11.0f);
+
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-0.15f, -0.15f, 0.15f);    // Низ лево
+    glVertex3f(0.15f, -0.15f, 0.15f);    // Низ право
+    glVertex3f(0.15f, 0.15f, 0.15f);    // Верх право
+    glVertex3f(-0.15f, 0.15f, 0.15f);    // Верх лево
+
+    // Задняя грань
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-0.15f, -0.15f, -0.15f);    // Низ право
+    glVertex3f(-0.15f, 0.15f, -0.15f);    // Верх право
+    glVertex3f(0.15f, 0.15f, -0.15f);    // Верх лево
+    glVertex3f(0.15f, -0.15f, -0.15f);    // Низ лево
+
+    // Верхняя грань
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-0.15f, 0.15f, -0.15f);    // Верх лево
+    glVertex3f(-0.15f, 0.15f, 0.15f);    // Низ лево
+    glVertex3f(0.15f, 0.15f, 0.15f);    // Низ право
+    glVertex3f(0.15f, 0.15f, -0.15f);    // Верх право
+
+    // Нижняя грань
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-0.15f, -0.15f, -0.15f);    // Верх право
+    glVertex3f(0.15f, -0.15f, -0.15f);    // Верх лево
+    glVertex3f(0.15f, -0.15f, 0.15f);    // Низ лево
+    glVertex3f(-0.15f, -0.15f, 0.15f);    // Низ право
+
+    // Правая грань
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(0.15f, -0.15f, -0.15f);    // Низ право
+    glVertex3f(0.15f, 0.15f, -0.15f);    // Верх право
+    glVertex3f(0.15f, 0.15f, 0.15f);    // Верх лево
+    glVertex3f(0.15f, -0.15f, 0.15f);    // Низ лево
+
+    // Левая грань
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-0.15f, -0.15f, -0.15f);    // Низ лево
+    glVertex3f(-0.15f, -0.15f, 0.15f);    // Низ право
+    glVertex3f(-0.15f, 0.15f, 0.15f);    // Верх право
+    glVertex3f(-0.15f, 0.15f, -0.15f);    // Верх лево
+
+    glEnd();
+
+    glFlush();
 
     glPopMatrix();
 }
@@ -122,7 +194,7 @@ void drawCube() {
 
     //Рислвание куба
     glLoadIdentity();
-    glTranslatef(3.0f, -2.0f, -15.0f);          // Сдвинуть вправо и вглубь экрана
+    glTranslatef(-2.5, -1.0, -9.0f);                 // Сдвиг влево и вглубь экрана
     glRotatef(rquad, 1.0f, 1.0f, 1.0f);        // Вращение куба по X, Y & Z
 
     glBegin(GL_QUADS);
@@ -196,30 +268,54 @@ void drawCube() {
 
     glFlush();
 
-    rquad -= 0.3f;           // Уменьшим переменную вращения для квадрата
+    rquad -= 0.4f;           // Уменьшим переменную вращения для квадрата
 
     glPopMatrix();
+}
+
+void drawFloor() {
+    for (int i = -8; i < 8; ++i) {
+        for (int j = -8; j < 8; ++j) {
+            glBindTexture(GL_TEXTURE_2D, texture3);
+            glPushMatrix();
+            //Рислвание куба
+            glLoadIdentity();
+            glTranslatef(i, -3.5f, j-11.0f);          // Сдвинуть вправо и вглубь экрана
+            glBegin(GL_QUADS);
+            // Верхняя грань
+            glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
+            glTexCoord2f(0.0f, 1.0f);
+            glVertex3f(-0.51f, 0.51f, -0.51f);    // Верх лево
+            glTexCoord2f(0.0f, 0.0f);
+            glVertex3f(-0.51f, 0.51f, 0.51f);    // Низ лево
+            glTexCoord2f(1.0f, 0.0f);
+            glVertex3f(0.51f, 0.51f, 0.51f);    // Низ право
+            glTexCoord2f(1.0f, 1.0f);
+            glVertex3f(0.51f, 0.51f, -0.51f);    // Верх право
+            glEnd();                             // Закончили квадраты
+            glFlush();
+            glPopMatrix();
+        }
+    }
 }
 
 void drawLightSource() {
     glLoadIdentity();
     glTranslatef(sphereTransX, sphereTransY, sphereTransZ);
     glColor3f(1.0, 1.0, 1.0);
-    glScalef(1.0, 1.0, 1.0);
     glutSolidSphere(0.2, 20, 20);
     glFlush();
 
-    sphereTransX = 7.0f * sin(glutGet(GLUT_ELAPSED_TIME) * 0.001);
-    sphereTransY = 1.0f * cos(glutGet(GLUT_ELAPSED_TIME) * 0.001);
-    sphereTransZ = -15.0 + 10.0f * cos(glutGet(GLUT_ELAPSED_TIME) * 0.001);
+    sphereTransX = 7.0f * sin(glutGet(GLUT_ELAPSED_TIME) * 0.0007);
+    sphereTransY = -2.0 + 0.0f * cos(glutGet(GLUT_ELAPSED_TIME) * 0.0002);
+    sphereTransZ = -11 + 7.0f * cos(glutGet(GLUT_ELAPSED_TIME) * 0.0007);
 }
 
 void drawSphere() {
     glLoadIdentity();
-    glTranslatef(0.0f, 3.0f, -15.0f);          // Сдвинуть вправо и вглубь экрана
-    glColor3f(1.0, 1.0, 1.0);
-    glScalef(1.0, 1.0, 1.0);
-    glutSolidSphere(1.0, 20, 20);
+    glTranslatef(0.0f, 1.5f, -13.0f);          // Сдвинуть вправо и вглубь экрана
+    glColor3f(0.0, 0.0, 0.0);
+    glutSolidSphere(0.7, 20, 20);
     glFlush();
 }
 
@@ -235,12 +331,14 @@ void display(void) {
     glEnable(GL_LIGHTING);   // Разрешить освещение
     glEnable(GL_TEXTURE_2D);      // Разрешить наложение текстуры
     drawCube();
+    drawFloor();
     drawPyramid();
     glDisable(GL_TEXTURE_2D);
     drawLight();
     drawSphere();
     glDisable(GL_LIGHTING);   // Разрешить освещение
 
+    drawLightCube();
     drawLightSource();
 
     glutSwapBuffers();
@@ -256,6 +354,10 @@ void reshape(int w, int h) {
     glLoadIdentity();//загружаем в нее единичную матрицу
 
     gluPerspective(45.0f, (GLfloat) w / (GLfloat) h, 0.1f, 100.0f);//задаем перспективное преобразование
+
+    gluLookAt(6.0, 8.0, 0.0, // Положение глаз, взгляд "из"
+              0.0, -3.0, -11.0, // Цель, взгляд "на"
+              0.0, 1.0, 0.0); // Пока игнорируем
 
     glMatrixMode(GL_MODELVIEW);    //задаем модельно-видовую матрицу
 
