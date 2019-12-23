@@ -19,21 +19,21 @@ GLfloat LightPosition1[] = {sphereTransX, sphereTransY, sphereTransZ, 1.0f};    
 void init(void) {
     //загрузка текстур с помощью библиотеки SOIL
     texture1 = SOIL_load_OGL_texture(
-            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/texture2.jpg",
+            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture2.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
     );
 
     texture2 = SOIL_load_OGL_texture(
-            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/texture6.jpg",
+            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture6.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
     );
 
     texture3 = SOIL_load_OGL_texture(
-            "/home/vkirillov/CLionProjects/OpenGL/resources/textures/floor.jpg",
+            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/floor.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
