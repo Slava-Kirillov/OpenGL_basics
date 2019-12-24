@@ -6,6 +6,7 @@
 GLuint texture1;
 GLuint texture2;
 GLuint texture3;
+GLuint texture4;
 
 GLfloat rtri;           // Угол для треугольник
 GLfloat rquad;          // Угол для четырехугольника
@@ -14,23 +15,27 @@ GLfloat sphereTransX;
 GLfloat sphereTransY;
 GLfloat sphereTransZ;
 
+GLfloat viewZ;
+
 GLfloat LightPosition1[] = {sphereTransX, sphereTransY, sphereTransZ, 1.0f};     // Позиция света
 
 void init(void) {
     //загрузка текстур с помощью библиотеки SOIL
+    texture4 = SOIL_load_OGL_texture(
+            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture1.jpg",
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
     texture1 = SOIL_load_OGL_texture(
             "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture2.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-    );
-
+            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
     texture2 = SOIL_load_OGL_texture(
             "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture6.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-    );
+            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
     texture3 = SOIL_load_OGL_texture(
             "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/floor.jpg",
@@ -71,6 +76,8 @@ void init(void) {
 
 void drawPyramid() {
 
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture2);
     glPushMatrix();
 
@@ -126,11 +133,13 @@ void drawPyramid() {
     glVertex3f(-1.0f, -1.0f, 1.0f);    // Низ право
     glEnd();                                                // Кончили рисовать основание пирамиды
 
-    glFlush();
-
     rtri += 0.2f;             // Увеличим переменную вращения для треугольника
 
     glPopMatrix();
+    glFlush();
+
+    glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void drawLightCube() {
@@ -183,12 +192,14 @@ void drawLightCube() {
 
     glEnd();
 
-    glFlush();
-
     glPopMatrix();
+    glFlush();
 }
 
 void drawCube() {
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture1);
     glPushMatrix();
 
@@ -271,16 +282,21 @@ void drawCube() {
     rquad -= 0.4f;           // Уменьшим переменную вращения для квадрата
 
     glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
 }
 
 void drawFloor() {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
     for (int i = -8; i < 8; ++i) {
         for (int j = -8; j < 8; ++j) {
             glBindTexture(GL_TEXTURE_2D, texture3);
             glPushMatrix();
             //Рислвание куба
             glLoadIdentity();
-            glTranslatef(i, -3.5f, j-11.0f);          // Сдвинуть вправо и вглубь экрана
+            glTranslatef(i, -3.5f, j - 11.0f);          // Сдвинуть вправо и вглубь экрана
             glBegin(GL_QUADS);
             // Верхняя грань
             glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
@@ -297,6 +313,8 @@ void drawFloor() {
             glPopMatrix();
         }
     }
+    glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void drawLightSource() {
@@ -312,11 +330,25 @@ void drawLightSource() {
 }
 
 void drawSphere() {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
+
     glLoadIdentity();
-    glTranslatef(0.0f, 1.5f, -13.0f);          // Сдвинуть вправо и вглубь экрана
-    glColor3f(0.0, 0.0, 0.0);
-    glutSolidSphere(0.7, 20, 20);
+    glTranslatef(0.0f, 1.0f, -13.0f);          // Сдвинуть вправо и вглубь экрана
+    GLUquadricObj *Obj = gluNewQuadric();
+    gluQuadricTexture(Obj, GL_TRUE);
+    gluQuadricDrawStyle(Obj, GLU_FILL);
+    glBindTexture(GL_TEXTURE_2D, texture4);
+    glPushMatrix();
+    glBegin(GL_LINE);
+    gluSphere(Obj, 0.8, 30, 30);
+    glEnd();
+    glPopMatrix();
+
     glFlush();
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
 }
 
 void drawLight() {
@@ -326,17 +358,14 @@ void drawLight() {
 //функция для рендеринга геометрии
 void display(void) {
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    //очистка используемых буферов
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glEnable(GL_LIGHTING);   // Разрешить освещение
-    glEnable(GL_TEXTURE_2D);      // Разрешить наложение текстуры
     drawCube();
     drawFloor();
     drawPyramid();
-    glDisable(GL_TEXTURE_2D);
+
     drawLight();
     drawSphere();
-    glDisable(GL_LIGHTING);   // Разрешить освещение
 
     drawLightCube();
     drawLightSource();
