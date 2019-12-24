@@ -16,7 +16,17 @@ GLfloat sphereTransX;
 GLfloat sphereTransY;
 GLfloat sphereTransZ;
 
-GLfloat viewZ;
+// угол поворота камеры
+float angle=0.0;
+// координаты вектора направления движения камеры
+float lx=0.0f, lz=-1.0f;
+// XZ позиция камеры
+float x=0.0f, z=5.0f;
+//Ключи статуса камеры. Переменные инициализируются нулевыми значениями
+//когда клавиши не нажаты
+float deltaAngle = 0.0f;
+float deltaMove = 0;
+int xOrigin = -1;
 
 GLfloat LightPosition1[] = {sphereTransX, sphereTransY, sphereTransZ, 1.0f};     // Позиция света
 
@@ -473,6 +483,7 @@ void drawLight() {
 //функция для рендеринга геометрии
 void display(void) {
 
+    //очистить буфер цвета и глубины
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawCube();
@@ -508,17 +519,11 @@ void reshape(int w, int h) {
     glLoadIdentity();    //делаем ее равной единичной матрице
 }
 
-//функция вызываемая при нажатии на клавишу, используетьсядля выхода из программы
-//void key(unsigned char key, int xx, int yy) {
-//    if (key == 27 || key == 'q' || key == 'Q')
-//        exit(0);
+////создание анимации с помощью библиотеки GLUT
+//void idle(void) {
+//    //запрашиваем перерисовку экрана
+//    glutPostRedisplay();
 //}
-
-//создание анимации с помощью библиотеки GLUT
-void idle(void) {
-    //запрашиваем перерисовку экрана
-    glutPostRedisplay();
-}
 
 void processNormalKeys(unsigned char key, int xx, int yy) {
     if (key == 27)
@@ -527,48 +532,48 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 
 void pressKey(int key, int xx, int yy) {
 
-//    switch (key) {
-//        case GLUT_KEY_UP : deltaMove = 0.5f; break;
-//        case GLUT_KEY_DOWN : deltaMove = -0.5f; break;
-//    }
+    switch (key) {
+        case GLUT_KEY_UP : deltaMove = 0.5f; break;
+        case GLUT_KEY_DOWN : deltaMove = -0.5f; break;
+    }
 }
 
 void releaseKey(int key, int x, int y) {
 
-//    switch (key) {
-//        case GLUT_KEY_UP :
-//        case GLUT_KEY_DOWN : deltaMove = 0;break;
-//    }
+    switch (key) {
+        case GLUT_KEY_UP :
+        case GLUT_KEY_DOWN : deltaMove = 0;break;
+    }
 }
 
 void mouseMove(int x, int y) {
 
     // this will only be true when the left button is down
-//    if (xOrigin >= 0) {
+    if (xOrigin >= 0) {
 
         // update deltaAngle
-//        deltaAngle = (x - xOrigin) * 0.001f;
+        deltaAngle = (x - xOrigin) * 0.001f;
 
         // update camera's direction
-//        lx = sin(angle + deltaAngle);
-//        lz = -cos(angle + deltaAngle);
-//    }
+        lx = sin(angle + deltaAngle);
+        lz = -cos(angle + deltaAngle);
+    }
 }
 
 void mouseButton(int button, int state, int x, int y) {
 
     // only start motion if the left button is pressed
-//    if (button == GLUT_LEFT_BUTTON) {
+    if (button == GLUT_LEFT_BUTTON) {
 
         // when the button is released
-//        if (state == GLUT_UP) {
-//            angle += deltaAngle;
-//            xOrigin = -1;
-//        }
-//        else  {// state = GLUT_DOWN
-//            xOrigin = x;
-//        }
-//    }
+        if (state == GLUT_UP) {
+            angle += deltaAngle;
+            xOrigin = -1;
+        }
+        else  {// state = GLUT_DOWN
+            xOrigin = x;
+        }
+    }
 }
 
 int main(int argc, char **argv) {
@@ -582,7 +587,7 @@ int main(int argc, char **argv) {
 
     glutDisplayFunc(display);//регестрируем функции-обработчики рендеринга в окно
     glutReshapeFunc(reshape);//изменение размера окна
-    glutIdleFunc(idle);
+    glutIdleFunc(display);
 
     glutIgnoreKeyRepeat(1);
     glutKeyboardFunc(processNormalKeys);
