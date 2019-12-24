@@ -7,6 +7,7 @@ GLuint texture1;
 GLuint texture2;
 GLuint texture3;
 GLuint texture4;
+GLuint texture5;
 
 GLfloat rtri;           // Угол для треугольник
 GLfloat rquad;          // Угол для четырехугольника
@@ -41,21 +42,30 @@ void init(void) {
             "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/floor.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-    );
+            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
+    texture5 = SOIL_load_OGL_texture(
+            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture3.jpg",
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
 
     glShadeModel(GL_SMOOTH);      // Разрешение сглаженного закрашивания
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f); // Черный фон
     glClearDepth(1.0f);           // Установка буфера глубины
     glDepthFunc(GL_LEQUAL);       // Тип теста глубины
+    glEnable(GL_NORMALIZE);
 
-    GLfloat LightAmbient1[] = {0.3f, 0.3f, 0.3f, 1.0f}; // Значения фонового света
+    GLfloat LightAmbient1[] = {0.5f, 0.5f, 0.5f, 1.0f}; // Значения фонового света
     GLfloat LightDiffuse1[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Значения диффузного света
     glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient1);    // Установка Фонового Света
     glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse1);    // Установка Диффузного Света
     glLightfv(GL_LIGHT1, GL_POSITION, LightPosition1);   // Позиция света
     glEnable(GL_LIGHT1); // Разрешение источника света номер один
+
+//    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 2.0);
+//    glLightf(GL_LIGHT1,GL_LINEAR_ATTENUATION,2.0);
+    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.01);
 
     GLfloat LightPosition2[] = {0.0f, 0.0f, -11.0, 1.0f};     // Позиция света
     GLfloat LightAmbient2[] = {0.0f, 0.0f, 0.0f, 0.0f}; // Значения фонового света
@@ -64,6 +74,14 @@ void init(void) {
     glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse2);    // Установка Диффузного Света
     glLightfv(GL_LIGHT0, GL_POSITION, LightPosition2);   // Позиция света
     glEnable(GL_LIGHT0); // Разрешение источника света номер один
+
+    glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.1);
+
+//    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+//    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+//    glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR);
+
+//    glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SINGLE_COLOR);
 
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -90,32 +108,40 @@ void drawPyramid() {
     glNormal3f(0.0f, 1.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Верх треугольника (Передняя)
+    glNormal3f(0.0f, 1.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);                  // Левая точка
+    glNormal3f(0.0f, 1.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);                  // Правая точка
 
     glNormal3f(1.0f, 1.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Верх треугольника (Правая)
+    glNormal3f(1.0f, 1.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);                  // Лево треугольника (Правая)
+    glNormal3f(1.0f, 1.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);                 // Право треугольника (Правая)
 
     glNormal3f(0.0f, 1.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Низ треугольника (Сзади)
+    glNormal3f(0.0f, 1.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);                 // Лево треугольника (Сзади)
+    glNormal3f(0.0f, 1.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);                 // Право треугольника (Сзади)
 
     glNormal3f(-1.0f, 1.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(0.5f, 1.0f);
     glVertex3f(0.0f, 1.0f, 0.0f);                  // Верх треугольника (Лево)
+    glNormal3f(-1.0f, 1.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);                  // Лево треугольника (Лево)
+    glNormal3f(-1.0f, 1.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);                  // Право треугольника (Лево)
     glEnd();                                                // Кончили рисовать пирамиду
@@ -125,10 +151,13 @@ void drawPyramid() {
     glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);    // Верх право
+    glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);    // Верх лево
+    glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);    // Низ лево
+    glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);    // Низ право
     glEnd();                                                // Кончили рисовать основание пирамиды
@@ -136,7 +165,6 @@ void drawPyramid() {
     rtri += 0.2f;             // Увеличим переменную вращения для треугольника
 
     glPopMatrix();
-    glFlush();
 
     glDisable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
@@ -149,42 +177,42 @@ void drawLightCube() {
     glTranslatef(0.0f, 0.0f, -11.0f);
 
     glBegin(GL_QUADS);
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.7f, 0.0f);
     glVertex3f(-0.15f, -0.15f, 0.15f);    // Низ лево
     glVertex3f(0.15f, -0.15f, 0.15f);    // Низ право
     glVertex3f(0.15f, 0.15f, 0.15f);    // Верх право
     glVertex3f(-0.15f, 0.15f, 0.15f);    // Верх лево
 
     // Задняя грань
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.7f, 0.0f);
     glVertex3f(-0.15f, -0.15f, -0.15f);    // Низ право
     glVertex3f(-0.15f, 0.15f, -0.15f);    // Верх право
     glVertex3f(0.15f, 0.15f, -0.15f);    // Верх лево
     glVertex3f(0.15f, -0.15f, -0.15f);    // Низ лево
 
     // Верхняя грань
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.7f, 0.0f);
     glVertex3f(-0.15f, 0.15f, -0.15f);    // Верх лево
     glVertex3f(-0.15f, 0.15f, 0.15f);    // Низ лево
     glVertex3f(0.15f, 0.15f, 0.15f);    // Низ право
     glVertex3f(0.15f, 0.15f, -0.15f);    // Верх право
 
     // Нижняя грань
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.7f, 0.0f);
     glVertex3f(-0.15f, -0.15f, -0.15f);    // Верх право
     glVertex3f(0.15f, -0.15f, -0.15f);    // Верх лево
     glVertex3f(0.15f, -0.15f, 0.15f);    // Низ лево
     glVertex3f(-0.15f, -0.15f, 0.15f);    // Низ право
 
     // Правая грань
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.7f, 0.0f);
     glVertex3f(0.15f, -0.15f, -0.15f);    // Низ право
     glVertex3f(0.15f, 0.15f, -0.15f);    // Верх право
     glVertex3f(0.15f, 0.15f, 0.15f);    // Верх лево
     glVertex3f(0.15f, -0.15f, 0.15f);    // Низ лево
 
     // Левая грань
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.7f, 0.0f);
     glVertex3f(-0.15f, -0.15f, -0.15f);    // Низ лево
     glVertex3f(-0.15f, -0.15f, 0.15f);    // Низ право
     glVertex3f(-0.15f, 0.15f, 0.15f);    // Верх право
@@ -193,7 +221,6 @@ void drawLightCube() {
     glEnd();
 
     glPopMatrix();
-    glFlush();
 }
 
 void drawCube() {
@@ -213,10 +240,13 @@ void drawCube() {
     glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);    // Низ лево
+    glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);    // Низ право
+    glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(1.0f, 1.0f, 1.0f);    // Верх право
+    glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0f, 1.0f, 1.0f);    // Верх лево
 
@@ -224,10 +254,13 @@ void drawCube() {
     glNormal3f(0.0f, 0.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);    // Низ право
+    glNormal3f(0.0f, 0.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-1.0f, 1.0f, -1.0f);    // Верх право
+    glNormal3f(0.0f, 0.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(1.0f, 1.0f, -1.0f);    // Верх лево
+    glNormal3f(0.0f, 0.0f, -1.0f);     // Нормаль указывает от наблюдателя
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);    // Низ лево
 
@@ -235,10 +268,13 @@ void drawCube() {
     glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0f, 1.0f, -1.0f);    // Верх лево
+    glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0f, 1.0f, 1.0f);    // Низ лево
+    glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0f, 1.0f, 1.0f);    // Низ право
+    glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(1.0f, 1.0f, -1.0f);    // Верх право
 
@@ -246,10 +282,13 @@ void drawCube() {
     glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);    // Верх право
+    glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);    // Верх лево
+    glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);    // Низ лево
+    glNormal3f(0.0f, -1.0f, 0.0f);     // Нормаль указывает вниз
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);    // Низ право
 
@@ -257,10 +296,13 @@ void drawCube() {
     glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);    // Низ право
+    glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(1.0f, 1.0f, -1.0f);    // Верх право
+    glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(1.0f, 1.0f, 1.0f);    // Верх лево
+    glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);    // Низ лево
 
@@ -268,16 +310,17 @@ void drawCube() {
     glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);    // Низ лево
+    glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);    // Низ право
+    glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-1.0f, 1.0f, 1.0f);    // Верх право
+    glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0f, 1.0f, -1.0f);    // Верх лево
 
     glEnd();                             // Закончили квадраты
-
-    glFlush();
 
     rquad -= 0.4f;           // Уменьшим переменную вращения для квадрата
 
@@ -291,28 +334,102 @@ void drawFloor() {
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     for (int i = -8; i < 8; ++i) {
-        for (int j = -8; j < 8; ++j) {
+        for (int j = -8; j < 10; ++j) {
             glBindTexture(GL_TEXTURE_2D, texture3);
             glPushMatrix();
-            //Рислвание куба
             glLoadIdentity();
-            glTranslatef(i, -3.5f, j - 11.0f);          // Сдвинуть вправо и вглубь экрана
+            glTranslatef(i, -4.0f, j - 11.0f);          // Сдвинуть вправо и вглубь экрана
             glBegin(GL_QUADS);
             // Верхняя грань
             glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
             glTexCoord2f(0.0f, 1.0f);
-            glVertex3f(-0.51f, 0.51f, -0.51f);    // Верх лево
+            glVertex3f(-0.5f, 0.5f, -0.51f);    // Верх лево
+            glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
             glTexCoord2f(0.0f, 0.0f);
-            glVertex3f(-0.51f, 0.51f, 0.51f);    // Низ лево
+            glVertex3f(-0.5f, 0.5f, 0.51f);    // Низ лево
+            glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
             glTexCoord2f(1.0f, 0.0f);
-            glVertex3f(0.51f, 0.51f, 0.51f);    // Низ право
+            glVertex3f(0.5f, 0.5f, 0.51f);    // Низ право
+            glNormal3f(0.0f, 1.0f, 0.0f);     // Нормаль указывает вверх
             glTexCoord2f(1.0f, 1.0f);
-            glVertex3f(0.51f, 0.51f, -0.51f);    // Верх право
+            glVertex3f(0.5f, 0.5f, -0.51f);    // Верх право
             glEnd();                             // Закончили квадраты
-            glFlush();
             glPopMatrix();
         }
     }
+
+    glBindTexture(GL_TEXTURE_2D, texture5);
+
+
+    for (int i = -4; i < 8; ++i) {
+        for (int j = -8; j < 8; ++j) {
+            glPushMatrix();
+            glLoadIdentity();
+            glTranslatef(-8, i, j - 11.0f);          // Сдвинуть вправо и вглубь экрана
+            glBegin(GL_QUADS);
+            glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
+            glTexCoord2f(1.0f, 0.0f);
+            glVertex3f(0.5f, -0.5f, -0.5f);    // Низ право
+            glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
+            glTexCoord2f(1.0f, 1.0f);
+            glVertex3f(0.5f, 0.5f, -0.5f);    // Верх право
+            glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
+            glTexCoord2f(0.0f, 1.0f);
+            glVertex3f(0.5f, 0.5f, 0.5f);    // Верх лево
+            glNormal3f(1.0f, 0.0f, 0.0f);     // Нормаль указывает вправо
+            glTexCoord2f(0.0f, 0.0f);
+            glVertex3f(0.5f, -0.5f, 0.5f);    // Низ лево
+            glEnd();                             // Закончили квадраты
+            glPopMatrix();
+        }
+    }
+
+    for (int i = -8; i < 8; ++i) {
+        for (int j = -4; j < 8; ++j) {
+            glPushMatrix();
+            glLoadIdentity();
+            glTranslatef(i, j, -8 - 11.0f);          // Сдвинуть вправо и вглубь экрана
+            glBegin(GL_QUADS);
+            glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
+            glTexCoord2f(0.0f, 0.0f);
+            glVertex3f(-0.5f, -0.5f, 0.5f);    // Низ лево
+            glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
+            glTexCoord2f(1.0f, 0.0f);
+            glVertex3f(0.5f, -0.5f, 0.5f);    // Низ право
+            glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
+            glTexCoord2f(1.0f, 1.0f);
+            glVertex3f(0.5f, 0.5f, 0.5f);    // Верх право
+            glNormal3f(0.0f, 0.0f, 1.0f);     // Нормаль указывает на наблюдателя
+            glTexCoord2f(0.0f, 1.0f);
+            glVertex3f(-0.5f, 0.5f, 0.5f);    // Верх лево
+            glEnd();                             // Закончили квадраты
+            glPopMatrix();
+        }
+    }
+
+    for (int i = -8; i < 8; ++i) {
+        for (int j = -8; j < 8; ++j) {
+            glPushMatrix();
+            glLoadIdentity();
+            glTranslatef(8, i, j - 11.0f);          // Сдвинуть вправо и вглубь экрана
+            glBegin(GL_QUADS);
+            glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
+            glTexCoord2f(0.0f, 0.0f);
+            glVertex3f(-0.5f, -0.5f, -0.5f);    // Низ лево
+            glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
+            glTexCoord2f(1.0f, 0.0f);
+            glVertex3f(-0.5f, -0.5f, 0.5f);    // Низ право
+            glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
+            glTexCoord2f(1.0f, 1.0f);
+            glVertex3f(-0.5f, 0.5f, 0.5f);    // Верх право
+            glNormal3f(-1.0f, 0.0f, 0.0f);     // Нормаль указывает влево
+            glTexCoord2f(0.0f, 1.0f);
+            glVertex3f(-0.5f, 0.5f, -0.5f);    // Верх лево
+            glEnd();                             // Закончили квадраты
+            glPopMatrix();
+        }
+    }
+
     glDisable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
 }
@@ -320,9 +437,8 @@ void drawFloor() {
 void drawLightSource() {
     glLoadIdentity();
     glTranslatef(sphereTransX, sphereTransY, sphereTransZ);
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(0.8, 0.8, 0.8);
     glutSolidSphere(0.2, 20, 20);
-    glFlush();
 
     sphereTransX = 7.0f * sin(glutGet(GLUT_ELAPSED_TIME) * 0.0007);
     sphereTransY = -2.0 + 0.0f * cos(glutGet(GLUT_ELAPSED_TIME) * 0.0002);
@@ -335,6 +451,7 @@ void drawSphere() {
 
     glLoadIdentity();
     glTranslatef(0.0f, 1.0f, -13.0f);          // Сдвинуть вправо и вглубь экрана
+    glRotatef(rtri, 1.0f, 1.0f, 1.0f);                 // Вращение пирамиды по оси Y
     GLUquadricObj *Obj = gluNewQuadric();
     gluQuadricTexture(Obj, GL_TRUE);
     gluQuadricDrawStyle(Obj, GLU_FILL);
@@ -344,8 +461,6 @@ void drawSphere() {
     gluSphere(Obj, 0.8, 30, 30);
     glEnd();
     glPopMatrix();
-
-    glFlush();
 
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
@@ -363,13 +478,13 @@ void display(void) {
     drawCube();
     drawFloor();
     drawPyramid();
-
     drawLight();
     drawSphere();
-
     drawLightCube();
     drawLightSource();
 
+    glFinish();
+    glFlush();
     glutSwapBuffers();
 }
 
@@ -394,15 +509,66 @@ void reshape(int w, int h) {
 }
 
 //функция вызываемая при нажатии на клавишу, используетьсядля выхода из программы
-void key(unsigned char key, int x, int y) {
-    if (key == 27 || key == 'q' || key == 'Q')
-        exit(0);
-}
+//void key(unsigned char key, int xx, int yy) {
+//    if (key == 27 || key == 'q' || key == 'Q')
+//        exit(0);
+//}
 
 //создание анимации с помощью библиотеки GLUT
 void idle(void) {
     //запрашиваем перерисовку экрана
     glutPostRedisplay();
+}
+
+void processNormalKeys(unsigned char key, int xx, int yy) {
+    if (key == 27)
+        exit(0);
+}
+
+void pressKey(int key, int xx, int yy) {
+
+//    switch (key) {
+//        case GLUT_KEY_UP : deltaMove = 0.5f; break;
+//        case GLUT_KEY_DOWN : deltaMove = -0.5f; break;
+//    }
+}
+
+void releaseKey(int key, int x, int y) {
+
+//    switch (key) {
+//        case GLUT_KEY_UP :
+//        case GLUT_KEY_DOWN : deltaMove = 0;break;
+//    }
+}
+
+void mouseMove(int x, int y) {
+
+    // this will only be true when the left button is down
+//    if (xOrigin >= 0) {
+
+        // update deltaAngle
+//        deltaAngle = (x - xOrigin) * 0.001f;
+
+        // update camera's direction
+//        lx = sin(angle + deltaAngle);
+//        lz = -cos(angle + deltaAngle);
+//    }
+}
+
+void mouseButton(int button, int state, int x, int y) {
+
+    // only start motion if the left button is pressed
+//    if (button == GLUT_LEFT_BUTTON) {
+
+        // when the button is released
+//        if (state == GLUT_UP) {
+//            angle += deltaAngle;
+//            xOrigin = -1;
+//        }
+//        else  {// state = GLUT_DOWN
+//            xOrigin = x;
+//        }
+//    }
 }
 
 int main(int argc, char **argv) {
@@ -411,11 +577,21 @@ int main(int argc, char **argv) {
     glutInitWindowSize(1200, 800);//задаем размер окна в пикселах
     glutInitWindowPosition(500, 500);//задаем координаты окна
     glutCreateWindow("Cubes and pyramid");
+
     init();
+
     glutDisplayFunc(display);//регестрируем функции-обработчики рендеринга в окно
     glutReshapeFunc(reshape);//изменение размера окна
     glutIdleFunc(idle);
-    glutKeyboardFunc(key);//нажатие клавиши
+
+    glutIgnoreKeyRepeat(1);
+    glutKeyboardFunc(processNormalKeys);
+    glutSpecialFunc(pressKey);
+    glutSpecialUpFunc(releaseKey);
+
+    glutMotionFunc(mouseMove);
+    glutMouseFunc(mouseButton);
+
     glutMainLoop();//запускаем цикл обработки сообщений
     return 0;
 }
