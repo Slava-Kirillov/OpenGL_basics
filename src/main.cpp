@@ -33,28 +33,28 @@ GLfloat LightPosition1[] = {sphereTransX, sphereTransY, sphereTransZ, 1.0f};    
 void init(void) {
     //загрузка текстур с помощью библиотеки SOIL
     texture4 = SOIL_load_OGL_texture(
-            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture1.jpg",
+            "/home/vkirillov/CLionProjects/OpenGL_basics/resources/textures/texture1.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
     texture1 = SOIL_load_OGL_texture(
-            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture2.jpg",
+            "/home/vkirillov/CLionProjects/OpenGL_basics/resources/textures/texture2.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
     texture2 = SOIL_load_OGL_texture(
-            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture6.jpg",
+            "/home/vkirillov/CLionProjects/OpenGL_basics/resources/textures/texture6.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
     texture3 = SOIL_load_OGL_texture(
-            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/floor.jpg",
+            "/home/vkirillov/CLionProjects/OpenGL_basics/resources/textures/floor.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
     texture5 = SOIL_load_OGL_texture(
-            "/home/kirillov/CLionProjects/OpenGL_basics/resources/textures/texture3.jpg",
+            "/home/vkirillov/CLionProjects/OpenGL_basics/resources/textures/texture3.jpg",
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
@@ -343,8 +343,8 @@ void drawCube() {
 void drawFloor() {
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
-    for (int i = -8; i < 8; ++i) {
-        for (int j = -8; j < 10; ++j) {
+    for (int i = -7; i < 8; ++i) {
+        for (int j = -7; j < 11; ++j) {
             glBindTexture(GL_TEXTURE_2D, texture3);
             glPushMatrix();
             glLoadIdentity();
@@ -371,8 +371,8 @@ void drawFloor() {
     glBindTexture(GL_TEXTURE_2D, texture5);
 
 
-    for (int i = -4; i < 8; ++i) {
-        for (int j = -8; j < 8; ++j) {
+    for (int i = -3; i < 5; ++i) {
+        for (int j = -7; j < 11; ++j) {
             glPushMatrix();
             glLoadIdentity();
             glTranslatef(-8, i, j - 11.0f);          // Сдвинуть вправо и вглубь экрана
@@ -394,7 +394,7 @@ void drawFloor() {
         }
     }
 
-    for (int i = -8; i < 8; ++i) {
+    for (int i = -7; i < 8; ++i) {
         for (int j = -4; j < 8; ++j) {
             glPushMatrix();
             glLoadIdentity();
@@ -417,8 +417,8 @@ void drawFloor() {
         }
     }
 
-    for (int i = -8; i < 8; ++i) {
-        for (int j = -8; j < 8; ++j) {
+    for (int i = -3; i < 6; ++i) {
+        for (int j = -7; j < 11; ++j) {
             glPushMatrix();
             glLoadIdentity();
             glTranslatef(8, i, j - 11.0f);          // Сдвинуть вправо и вглубь экрана
